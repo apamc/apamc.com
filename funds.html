@@ -68,11 +68,11 @@
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
-    .dropdown {
+    .dropdownhold {
       padding: 10px;
     }
 
-    .dropdown-header {
+    .dropdownhold-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -80,7 +80,7 @@
       padding: 10px;
     }
 
-    .dropdown-header h3 {
+    .dropdownhold-header h3 {
       margin: 0;
       font-size: 18px;
     }
@@ -90,7 +90,7 @@
       transition: transform 0.3s ease;
     }
 
-    .dropdown-content {
+    .dropdownhold-content {
       max-height: 0;
       overflow: hidden;
       transition: max-height 0.3s ease;
@@ -99,13 +99,13 @@
       padding-right: 10px;
     }
 
-    .dropdown-content ul {
+    .dropdownhold-content ul {
       margin: 10px 0;
       padding: 0;
       list-style-type: none;
     }
 
-    .dropdown-content li {
+    .dropdownhold-content li {
       margin: 5px 0;
       font-size: 16px;
     }
@@ -218,7 +218,13 @@
       <nav>
         <ul>
           <li><a href="Home.html">Home</a></li>
-          <li><a href="funds.html">Funds</a></li>
+          <li>
+            <a href="funds.html">Funds</a>
+            <div class="dropdown-content">
+              <a href="securities.html">Securities</a>
+              <a href="invest.html">Investment</a>
+            </div>
+          </li>
           <li><a href="services.html">Services</a></li>
           <li><a href="about.html">About</a></li>
           <li id="uq1"><a href="contact.html">Contact</a></li>
@@ -270,12 +276,12 @@
     </div>
     <div class="section-2">
       <div class="container-4">
-        <div class="dropdown">
-          <div class="dropdown-header" onclick="toggleDetails()">
+        <div class="dropdownhold">
+          <div class="dropdownhold-header" onclick="toggleDetails()">
             <h3>Holdings</h3>
             <span id="arrow">▼</span>
           </div>
-          <div class="dropdown-content" id="details">
+          <div class="dropdownhold-content" id="details">
             <!-- Filter Options -->
             <div class="container-holdings">
               <h2>Holdings (15)</h2>
