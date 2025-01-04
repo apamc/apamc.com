@@ -26,11 +26,10 @@
 
         .section-1 {
             border: 2px solid rgb(237, 6, 6);
-            height: 500px;
+            height: 1500px;
             width: 100%;
             display: flex;
             justify-content: center;
-            align-items: center;
             margin: 0;
         }
 
@@ -79,7 +78,7 @@
             </ol>
         </nav>
         <div class="section-1">
-            <iframe src="login.html" style="width: 100%;height:500px;" frameborder="0"></iframe>
+            <iframe src="login.html" style="width: 100%;height:100%;" frameborder="0"></iframe>
         </div>
     </section>
     <footer class="site-footer">
@@ -143,30 +142,6 @@
     </footer>
 </body>
 <script>
-    // Hardcoded user data
-    const users = {
-        FA1001: { password: "1001", redirectUrl: "user1.html" },
-        FA1002: { password: "1002", redirectUrl: "user2.html" },
-        FA1003: { password: "1003", redirectUrl: "user3.html" },
-        FA1004: { password: "1004", redirectUrl: "user4.html" },
-        FA1005: { password: "1005", redirectUrl: "user5.html" },
-        FA1006: { password: "1006", redirectUrl: "user6.html" },
-        FA1007: { password: "1007", redirectUrl: "user7.html" },
-        FA1008: { password: "1008", redirectUrl: "user8.html" },
-    }
-    function login() {
-        // Get input values
-        const username = document.getElementById("username").value;
-        const password = document.getElementById("password").value;
-
-        // Validate credentials
-        if (users[username] && users[username].password === password) {
-            // Redirect to the respective profile page
-            window.location.href = users[username].redirectUrl;
-        } else {
-            alert("Invalid username or password");
-        }
-    }
     // You can disable right - click on your website to prevent users from accessing the "Inspect" option easily:
     document.addEventListener('contextmenu', event => event.preventDefault());
     document.addEventListener('keydown', (event) => {

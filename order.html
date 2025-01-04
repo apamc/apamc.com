@@ -14,7 +14,7 @@
     .form-container {
       max-width: 500px;
       margin: auto;
-      margin-top: 0px;
+      margin-top: 20px;
       padding: 20px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       background-color: #fff;
@@ -25,48 +25,43 @@
 <body class="bg-light">
   <div class="container">
     <div class="form-container">
-      <h4 class="text-center mb-4">Create account</h4>
+      <h4 class="text-center mb-4">Orders</h4>
       <form id="submit-to-google-sheet">
         <div class="form-group">
-          <label for="name">Name:</label>
-          <input class="form-control" type="text" name="name" id="name" placeholder="Name" required />
+          <label for="name">Stock Name:</label>
+          <input class="form-control" type="text" name="name" id="name" placeholder="Ex:Tcs" required />
         </div>
-        <div class="form-group">
-          <label for="email">Email:</label>
-          <input class="form-control" type="email" name="email" id="email" placeholder="Email" required />
-        </div>
+        
         <div class="input-group">
-          <label for="slip" class="input-group">Contact Number:</label>
-          <div class="input-group-text">+91</div>
-          <input class="form-control" type="text" name="contact_number" id="contact_number" placeholder="Contact Number"
-            required />
+          <label for="slip" class="input-group">Quantity</label>
+          <input class="form-control" type="text" name="contact_number" id="contact_number" placeholder="" required />
+          <div class="input-group-text">.nos</div>
         </div>
 
         <div class="form-group">
-          <label for="loc">Service</label>
+          <label for="loc">Order type</label>
           <select class="form-control" name="gender" id="gender" required>
-            <option value="" disabled selected hidden>Choose...</option>
-            <option value="Investment">Investment</option>
-            <option value="Financial consultation">Financial consultation</option>
-            <option value="Financial account">Financial account</option>
+            <option value="Buy">Buy</option>
+            <option value="Sell">Sell</option>
           </select>
         </div>
         <div class="form-group">
-          <label for="loc">Message:</label>
-          <textarea class="form-control" style="padding: 10px;" name="message" id="message" placeholder="Message"
-            required></textarea>
+          <label for="loc">Price limit</label>
+          <input class="form-control"  name="message" id="message" placeholder="Price"></input>
           <div class="form-group form-check mt-2">
             <input class="form-check-input" style="display:none;" type="checkbox" id="age" />
             <label class="form-check-label" style="display:none;" for="age">error</label>
           </div>
           <div class="form-group form-check">
             <input class="form-check-input" type="checkbox" id="ex" required />
-            <label class="form-check-label" for="ex">I certify that I am agree with the
-              <a href="terms.html" target="_blank">terms and policies.</a>
-            </label>
+            <label class="form-check-label" for="ex">Market price</label>
+          </div>
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input class="form-control" type="email" name="email" id="email" placeholder="Email" required />
           </div>
           <button type="submit" class="btn btn-primary btn-block">
-            Submit
+            Order
           </button>
       </form>
     </div>
@@ -74,7 +69,7 @@
 
   <script>
     const scriptURL =
-      "https://script.google.com/macros/s/AKfycbxRMzPlMaSpgd2JV33mqP28SnFWXTfjyM6NWIW7zZhQDyeApcHnBK35qOc3D9Ucwgtigg/exec";
+      "https://script.google.com/macros/s/AKfycbxsdvmMdkjZUm_oT0sVTGGbv7mLeiapapvKSbxlh6fPnxiMUk3Llui2oDVVF89qsg7Ejw/exec";
     const form = document.forms["submit-to-google-sheet"];
     form.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -88,27 +83,18 @@
         formData.append("age", "No");
       }
       if (ex) {
-        formData.append("ex", "Yes");
+        formData.append("ex", "Market price");
       } else {
-        formData.append("ex", "No");
+        formData.append("ex", "Price limit");
       }
 
       fetch(scriptURL, { method: "POST", body: formData })
         .then((response) => {
-          swal("Done", "Submitted Successfully.", "success");
+          swal("Done", "Order placed.", "success");
         })
         .catch((error) => {
           swal("Error", "Something went wrong. please try again!", "error");
         });
-    });
-
-    document.getElementById('submit-to-google-sheet').addEventListener('submit', function (e) {
-      e.preventDefault(); // Prevent the default form submission
-
-      // Redirect to home page after 3 seconds
-      setTimeout(function () {
-        window.location.href = 'Home.html'; // Replace 'home.html' with your home page URL
-      }, 8000);
     });
   </script>
 </body>
