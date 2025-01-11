@@ -14,67 +14,14 @@ body {
     line-height: 1.4;
 }
 
-
-header {
-    background: #333;
-    color: #fff;
-    padding: 10px 0;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-}
-
-header div a h1 {
-    margin: 0px;
-    padding: 0px;
-    text-align: center;
-    display: inline-block;
-    font-size: 26px;
-    font-weight: bold;
-}
-
-nav ul {
-    list-style: none;
-    padding: 0;
-    text-align: right;
-}
-
-nav ul li {
-    display: inline-block;
-    margin: 0 20px;
-    position: relative;
-}
-
-#uq1 {
-    margin: 0 0 0 20px;
-}
-
-a {
-    color: #000000;
-    text-decoration: none;
-}
-
-nav ul {
-    list-style: none;
-    display: flex;
-    margin: 0;
-    padding: 0;
-}
-
-nav ul li a {
-    text-decoration: none;
-    color: white;
-    padding: 10px 10px;
-    display: block;
-    list-style: none;
-}
-
-nav ul li a:hover {
-    background-color: #575757;
-}
-
+.navbar-dark {
+    background-color: #212529;
+  }
+  .nav-link.active {
+    background-color: #0d6efd;
+    color: white !important;
+    border-radius: 0.25rem;
+  }
 .dropdown-content {
     display: none;
     position: absolute;

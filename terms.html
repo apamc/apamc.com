@@ -6,7 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AP AMC</title>
   <link rel="stylesheet" href="general.css">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <style>
     body {
@@ -14,10 +15,6 @@
       margin: 0;
       padding: 0;
       line-height: 1.4;
-    }
-
-    #uq2 {
-      margin-top: 62px;
     }
 
     .container-2 {
@@ -37,47 +34,64 @@
       justify-content: center;
       align-items: center;
     }
-     button {
+
+    button {
       margin: 10px;
       padding: 5px 10px;
-      background-color: #007bff;
       color: #fff;
       border-radius: 5px;
       border: none;
       cursor: pointer;
     }
 
-     button:hover {
-      background-color: #0056b3;
+    a {
+      text-decoration: none;
     }
   </style>
 </head>
 
 <body>
-  <header>
-    <div class="container-1">
-      <a href="Home.html" style="color: aliceblue">
-        <h1>AP AMC</h1>
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="index.html">
+        <span class="ms-2">AP AMC</span>
       </a>
-      <nav>
-        <ul>
-          <li><a href="Home.html">Home</a></li>
-          <li><a href="funds.html">Funds</a></li>
-          <li><a href="services.html">Services</a></li>
-          <li><a href="about.html">About</a></li>
-          <li id="uq1"><a href="contact.html">Contact</a></li>
-          <li><a href="user.html">Profile</a></li>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link " href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="funds.html">Funds</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="services.html">Services</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="about.html">About</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="contact.html">Contact</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="user.html">Profile</a>
+          </li>
         </ul>
-        </ul>
-      </nav>
+      </div>
     </div>
-  </header>
-  <div id="uq2" class="breadcrum-list">
-    <ul>
-      <li><a href="Home.html">Home ></a></li>
-      <li><a href="terms.html">Terms and Conditions</a></li>
-    </ul>
-  </div>
+  </nav>
+  <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb" id="uq2">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Terms and Conditions</li>
+    </ol>
+  </nav>
+
   <section class="section-1">
     <div class="container-2">
       <h2>Terms and Conditions</h2>
@@ -86,13 +100,14 @@
         representations or warranties of any kind, express or implied, about the completeness, accuracy, reliability,
         suitability, or availability of the information, products, or services contained on this site. Investing in
         financial markets involves risks, including the loss of principal. Past performance is not indicative of future
-        results. Individuals should consult with a qualified financial advisor before making any investment decisions. The
+        results. Individuals should consult with a qualified financial advisor before making any investment decisions.
+        The
         Company is not responsible for any losses or damages arising from reliance on the information provided on this
         site. By using this website, you acknowledge and agree that you have read and understood this disclaimer.For a
         comprehensive understanding of our services and any associated risks, please review our Terms and Conditions and
         Privacy Policy.
       </p>
-      <button><a href="Home.html">Got it!</a></button>
+      <button><a href="index.html">Got it!</a></button>
     </div>
   </section>
   <footer class="site-footer">
