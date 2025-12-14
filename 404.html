@@ -3,8 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>404 - Page Not Found</title>
+  <title>Interactive Business Website</title>
+
+  <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <!-- AOS Animation -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
   <style>
     * {
       margin: 0;
@@ -13,115 +19,255 @@
       font-family: 'Poppins', sans-serif;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
+      background: #0f0f1a;
+      color: #fff;
+    }
+
+    /* NAVBAR */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 20px 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(15,15,26,0.9);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      color: #7f5cff;
+    }
+
+    nav a {
+      margin-left: 25px;
+      text-decoration: none;
+      color: #fff;
+      font-weight: 500;
+      position: relative;
+    }
+
+    nav a::after {
+      content: '';
+      width: 0;
+      height: 2px;
+      background: #7f5cff;
+      position: absolute;
+      left: 0;
+      bottom: -5px;
+      transition: 0.3s;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    /* HERO */
+    .hero {
       min-height: 100vh;
-      background: linear-gradient(135deg, #667eea, #764ba2);
       display: flex;
       align-items: center;
-      justify-content: center;
-      color: #fff;
-      overflow: hidden;
+      justify-content: space-between;
+      padding: 120px 60px;
+      background: radial-gradient(circle at top, #1c1c3a, #0f0f1a);
     }
 
-    .container {
-      text-align: center;
-      padding: 40px;
+    .hero-text {
       max-width: 600px;
-      animation: fadeIn 1.2s ease-in-out;
     }
 
-    h1 {
-      font-size: 8rem;
-      font-weight: 700;
-      line-height: 1;
+    .hero-text h2 {
+      font-size: 3.5rem;
+      line-height: 1.2;
+      margin-bottom: 20px;
     }
 
-    h2 {
-      font-size: 2rem;
-      margin-bottom: 15px;
+    .hero-text span {
+      color: #7f5cff;
     }
 
-    p {
-      font-size: 1rem;
+    .hero-text p {
+      font-size: 1.1rem;
       opacity: 0.9;
       margin-bottom: 30px;
     }
 
-    a.btn {
-      display: inline-block;
-      padding: 14px 32px;
-      background: #fff;
-      color: #764ba2;
-      font-weight: 600;
-      border-radius: 50px;
+    .btn {
+      padding: 14px 34px;
+      background: linear-gradient(135deg, #7f5cff, #5a3dff);
+      color: #fff;
       text-decoration: none;
-      transition: all 0.3s ease;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      border-radius: 50px;
+      font-weight: 600;
+      transition: transform 0.3s, box-shadow 0.3s;
+      display: inline-block;
     }
 
-    a.btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    .btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(127,92,255,0.4);
     }
 
-    .circle {
+    /* FLOATING SHAPES */
+    .shape {
       position: absolute;
       border-radius: 50%;
-      background: rgba(255,255,255,0.1);
+      background: rgba(127,92,255,0.2);
       animation: float 6s infinite ease-in-out;
     }
 
-    .circle.one {
+    .shape.one {
       width: 200px;
       height: 200px;
-      top: 10%;
-      left: 15%;
+      top: 20%;
+      right: 10%;
     }
 
-    .circle.two {
-      width: 300px;
-      height: 300px;
-      bottom: 10%;
-      right: 10%;
+    .shape.two {
+      width: 120px;
+      height: 120px;
+      bottom: 15%;
+      right: 30%;
       animation-delay: 2s;
     }
 
     @keyframes float {
       0% { transform: translateY(0); }
-      50% { transform: translateY(-20px); }
+      50% { transform: translateY(-25px); }
       100% { transform: translateY(0); }
     }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    /* FEATURES */
+    .features {
+      padding: 100px 60px;
+      background: #13132b;
     }
 
-    @media (max-width: 480px) {
-      h1 {
-        font-size: 5rem;
-      }
-      h2 {
-        font-size: 1.5rem;
-      }
+    .features h3 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 60px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+    }
+
+    .card {
+      background: #1c1c3a;
+      padding: 40px;
+      border-radius: 20px;
+      transition: transform 0.4s, box-shadow 0.4s;
+    }
+
+    .card:hover {
+      transform: translateY(-10px) scale(1.03);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+
+    .card h4 {
+      margin-bottom: 15px;
+      color: #7f5cff;
+    }
+
+    /* CTA */
+    .cta {
+      padding: 100px 60px;
+      text-align: center;
+      background: linear-gradient(135deg, #7f5cff, #5a3dff);
+    }
+
+    .cta h3 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    .cta a {
+      background: #fff;
+      color: #5a3dff;
+    }
+
+    footer {
+      padding: 30px;
+      text-align: center;
+      background: #0f0f1a;
+      opacity: 0.8;
+    }
+
+    @media(max-width: 768px) {
+      header { padding: 20px; }
+      .hero { flex-direction: column; text-align: center; }
+      .hero-text h2 { font-size: 2.5rem; }
     }
   </style>
 </head>
 <body>
-  <div class="circle one"></div>
-  <div class="circle two"></div>
 
-  <div class="container">
-    <h1>404</h1>
-    <h2>Page Not Found</h2>
-    <p>Oops! The page you’re looking for doesn’t exist or has been moved.</p>
-    <a href="/" class="btn">Go Back Home</a>
+<header>
+  <h1>AP Finance</h1>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#features">Services</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<section class="hero" id="home">
+  <div class="hero-text" data-aos="fade-right">
+    <h2>Smart <span>Financial</span><br> Solutions for You</h2>
+    <p>We help clients grow their wealth with secure, innovative and trusted financial services.</p>
+    <a href="#contact" class="btn">Get Started</a>
   </div>
+
+  <div class="shape one"></div>
+  <div class="shape two"></div>
+</section>
+
+<section class="features" id="features">
+  <h3 data-aos="fade-up">Our Services</h3>
+  <div class="cards">
+    <div class="card" data-aos="zoom-in">
+      <h4>Loan Services</h4>
+      <p>Fast approval loans with minimal documentation and flexible repayment options.</p>
+    </div>
+    <div class="card" data-aos="zoom-in" data-aos-delay="150">
+      <h4>Investment Plans</h4>
+      <p>Grow your money with high-return, low-risk investment strategies.</p>
+    </div>
+    <div class="card" data-aos="zoom-in" data-aos-delay="300">
+      <h4>Business Funding</h4>
+      <p>Custom funding solutions designed to scale your business faster.</p>
+    </div>
+  </div>
+</section>
+
+<section class="cta" id="contact">
+  <h3 data-aos="fade-up">Ready to Grow Your Business?</h3>
+  <p data-aos="fade-up" data-aos-delay="150">Contact us today and start your journey.</p><br>
+  <a href="https://apfinance.kesug.com/V-1/index.html" class="btn">Contact Now</a>
+</section>
+
+<footer>
+  © 2025 AP Finance. All Rights Reserved.
+</footer>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  AOS.init({
+    duration: 1000,
+    once: true
+  });
+</script>
+
 </body>
 </html>
