@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+  <title>AP Finance · full prototype</title>
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    body {
+      background: #f0f4fa;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .app-container {
+      display: flex;
+      flex: 1;
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      background: white;
+      box-shadow: 0 0 30px rgba(0,0,0,0.03);
+    }
+    /* desktop sidebar */
+    .sidebar {
+      width: 260px;
+      background: #0f1a2c;
+      color: #d3e0f0;
+      display: none;
+      flex-direction: column;
+      padding: 2rem 0 1rem;
+    }
+    .sidebar .nav-item {
+      padding: 1rem 1.8rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: #b0c7e0;
+      text-decoration: none;
+      font-weight: 500;
+      border-left: 4px solid transparent;
+      transition: 0.15s;
+    }
+    .sidebar .nav-item.active, .sidebar .nav-item:hover {
+      background: #1f2e44;
+      color: white;
+      border-left-color: #3b82f6;
+    }
+    .sidebar .nav-item i { width: 26px; font-size: 1.3rem; }
+
+    .main-content {
+      flex: 1;
+      background: #f9fcff;
+      display: flex;
+      flex-direction: column;
+    }
+    .pages {
+      flex: 1;
+      padding: 1.5rem 1rem 90px;
+      overflow-y: auto;
+      max-width: 1000px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .page { display: none; }
+    .page.active-page { display: block; }
+
+    /* bottom mobile navbar */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: white;
+      box-shadow: 0 -4px 12px rgba(0,0,0,0.06);
+      display: flex;
+      justify-content: space-around;
+      padding: 0.5rem 0.25rem;
+      border-top: 1px solid #e2eaf2;
+      z-index: 20;
+    }
+    .bottom-nav .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: #5f6c84;
+      font-size: 0.7rem;
+    }
+    .bottom-nav .nav-item i { font-size: 1.4rem; margin-bottom: 0.2rem; }
+    .bottom-nav .nav-item.active { color: #2563eb; }
+
+    @media (min-width: 800px) {
+      .sidebar { display: flex; }
+      .bottom-nav { display: none; }
+      .pages { padding: 2rem 2rem 1rem; }
+    }
+
+    /* cards & components */
+    .card {
+      background: white;
+      border-radius: 24px;
+      padding: 1.5rem;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.02);
+      border: 1px solid #edf2f9;
+      margin-bottom: 1.5rem;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 0.8rem;
+    }
+    .badge {
+      background: #e9effa;
+      color: #1e4fd9;
+      padding: 0.3rem 1rem;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: inline-block;
+    }
+    .badge.green { background: #e3f7e7; color: #0b6b34; }
+    .badge.yellow { background: #fff8e0; color: #b6560c; }
+    .btn {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.15s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .btn-outline {
+      background: white;
+      border: 1px solid #cfddee;
+      color: #1e293b;
+    }
+    .btn-small {
+      padding: 0.4rem 1.2rem;
+      font-size: 0.85rem;
+    }
+    .fab {
+      position: fixed;
+      bottom: 100px;
+      right: 20px;
+      background: #2563eb;
+      color: white;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 18px rgba(37,99,235,0.35);
+      font-size: 2rem;
+      z-index: 25;
+      cursor: pointer;
+    }
+    .progress-bar {
+      height: 12px;
+      background: #e6edf6;
+      border-radius: 30px;
+      margin: 0.7rem 0;
+    }
+    .progress-fill { height: 12px; background: #2563eb; border-radius: 30px; width: 75%; }
+    .divider { height: 1px; background: #eef2f8; margin: 1.2rem 0; }
+    .flex-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .flex-sb {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .copy-btn {
+      background: white;
+      border: 1px dashed #9fb0cc;
+      padding: 0.2rem 0.9rem;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+    .qr-placeholder {
+      background: #f0f5fe;
+      height: 150px;
+      width: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 24px;
+      border: 2px dashed #b9cbee;
+      color: #2d4f8c;
+      margin: 0.8rem 0;
+    }
+    .payment-tabs {
+      display: flex;
+      background: #eef2f8;
+      border-radius: 40px;
+      padding: 0.2rem;
+      margin: 1rem 0;
+    }
+    .payment-tabs button {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 0.7rem;
+      border-radius: 40px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .payment-tabs .active-tab { background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    th { text-align: left; color: #4f5e74; font-weight: 500; padding-bottom: 0.6rem; }
+    td { padding: 0.6rem 0; border-bottom: 1px solid #ecf3fa; }
+    .text-muted { color: #5e6f88; }
+    .text-small { font-size: 0.8rem; }
+    .avatar-lg { width: 70px; height: 70px; background: #a5c0e8; border-radius: 50%; }
+    .banner {
+      background: #e6f0ff; padding: 0.8rem 1.2rem; border-radius: 40px;
+      margin-bottom: 1rem; font-weight: 600; display: flex; gap: 1rem; align-items: center;
+    }
+    .breadcrumb { color: #58739d; margin-bottom: 0.5rem; }
+  </style>
+</head>
+<body>
+<div class="app-container">
+  <!-- DESKTOP SIDEBAR -->
+  <div class="sidebar" id="desktopSidebar">
+    <div style="padding: 0 1.8rem 2.5rem; color: white; font-size: 1.4rem; font-weight: 600;">💰 AP Finance</div>
+    <a href="#" class="nav-item" data-nav="dashboard"><i class="fas fa-home"></i> Home (Dashboard)</a>
+    <a href="#" class="nav-item" data-nav="myLoans"><i class="fas fa-file-invoice"></i> My Loans</a>
+    <a href="#" class="nav-item" data-nav="account"><i class="fas fa-user-circle"></i> Account</a>
+    <a href="#" class="nav-item" data-nav="support"><i class="fas fa-headset"></i> Support</a>
+    <div style="margin-top: auto; padding: 2rem 1.8rem 1rem;">
+      <a href="#" class="nav-item" data-nav="reports"><i class="fas fa-chart-pie"></i> Reports</a>
+      <a href="#" class="nav-item" data-nav="admin"><i class="fas fa-shield-alt"></i> Admin</a>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="pages" id="pagesContainer">
+
+      <!-- LANDING (pre-login) -->
+      <div id="landing" class="page active-page">
+        <div class="card" style="text-align: center; padding: 3rem 1.5rem;">
+          <h1 style="font-size: 2.3rem;">Get Loans in <span style="color:#2563eb;">under 5 minutes</span></h1>
+          <p style="margin: 1rem 0 2rem; color: #334155;">Low interest · Quick disbursal · Zero paperwork</p>
+          <div style="display: flex; gap: 1rem; justify-content: center;">
+            <button class="btn" id="gotoLoginBtn">Login</button>
+            <button class="btn btn-outline" id="gotoSignupBtn">Sign Up</button>
+          </div>
+        </div>
+        <div class="grid-3">
+          <div class="card"><i class="fas fa-bolt" style="color:#2563eb;"></i> <strong>Fast</strong><br><span class="text-muted">Disbursal in hours</span></div>
+          <div class="card"><i class="fas fa-percent" style="color:#2563eb;"></i> <strong>Low interest</strong><br><span class="text-muted">from 2% p.m.</span></div>
+          <div class="card"><i class="fas fa-shield-alt" style="color:#2563eb;"></i> <strong>Safe</strong><br><span class="text-muted">100% data protection</span></div>
+        </div>
+      </div>
+
+      <!-- LOGIN -->
+      <div id="login" class="page">
+        <div class="card">
+          <h2>Welcome back</h2>
+          <p class="text-muted">Login to your account</p>
+          <div style="margin: 2rem 0 1rem;">
+            <label>Mobile number</label>
+            <input type="text" placeholder="9876543210" style="width:100%; margin:0.5rem 0 1.2rem; padding:0.9rem 1.2rem; border-radius:40px; border:1px solid #dde3ec;">
+            <label>Password</label>
+            <input type="password" placeholder="········" style="width:100%; margin:0.5rem 0 1.8rem; padding:0.9rem 1.2rem; border-radius:40px; border:1px solid #dde3ec;">
+            <button class="btn" id="loginSubmitBtn">Login</button>
+            <p class="text-small" style="margin-top:1rem;">New user? <a href="#" id="loginToSignup">Register</a></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SIGNUP (wizard style) -->
+      <div id="signup" class="page">
+        <div class="card">
+          <h2>Create account</h2>
+          <p class="badge" style="margin-bottom:1rem;">Step 1: Basic details</p>
+          <input type="text" placeholder="Full name" style="width:100%; margin:0.5rem 0; padding:0.9rem; border-radius:40px; border:1px solid #dde3ec;">
+          <input type="text" placeholder="Mobile number" style="width:100%; margin:0.5rem 0; padding:0.9rem; border-radius:40px;">
+          <input type="email" placeholder="Email (optional)" style="width:100%; margin:0.5rem 0; padding:0.9rem; border-radius:40px;">
+          <div style="position:relative;">
+            <input type="password" placeholder="Password" style="width:100%; margin:0.5rem 0; padding:0.9rem; border-radius:40px;">
+            <span style="position:absolute; right:20px; top:18px;"><i class="far fa-eye-slash"></i></span>
+          </div>
+          <input type="text" placeholder="Referral code (optional)" style="width:100%; margin:0.5rem 0; padding:0.9rem; border-radius:40px;">
+          <p class="text-small">🔐 Your data is 100% safe</p>
+          <button class="btn" id="signupSubmitBtn">Sign Up</button>
+        </div>
+      </div>
+
+      <!-- DASHBOARD (HOME) – full 360 view -->
+      <div id="dashboard" class="page">
+        <div class="flex-sb">
+          <div><h2>Welcome back, Ravinder! 👋</h2><p class="text-muted text-small">Last login: 26/02/2026 02:02 AM</p></div>
+          <div><i class="fas fa-bell" style="font-size:1.5rem;"></i> <i class="fas fa-user-circle" style="font-size:2rem; margin-left:0.5rem;"></i></div>
+        </div>
+
+        <!-- quick glance cards -->
+        <div class="grid-2">
+          <div class="card"><span class="text-muted">Outstanding balance</span><h2>₹25,100</h2><span class="text-small">Updated today</span></div>
+          <div class="card"><span class="text-muted">Next EMI due</span><h2>₹500</h2><span class="text-small">08/03/2026 (10 days)</span></div>
+          <div class="card"><span class="text-muted">Interest rate</span><h3>2% per month</h3></div>
+          <div class="card"><span class="text-muted">Active loans</span><h3>1 Loan</h3></div>
+        </div>
+
+        <!-- Loan repayment progress -->
+        <div class="card">
+          <div class="flex-sb"><strong>Sanctioned amount: ₹25,100</strong> <span class="badge green">75% repaid</span></div>
+          <div class="progress-bar"><div class="progress-fill"></div></div>
+          <div class="flex-sb"><span>Paid: ₹18,825</span><span>Remaining: ₹6,275</span></div>
+        </div>
+
+        <!-- Recent transactions snapshot -->
+        <div class="card">
+          <div class="flex-sb"><h4>Recent transactions</h4><a href="#" id="viewAllTransactions">View all</a></div>
+          <table>
+            <tr><td>08 Mar 26</td><td>EMI Payment</td><td>-₹500</td></tr>
+            <tr><td>01 Mar 26</td><td>Late fee</td><td>-₹100</td></tr>
+          </table>
+        </div>
+        <!-- FAB -->
+        <div class="fab" id="fabAddLoan"><i class="fas fa-plus"></i></div>
+      </div>
+
+      <!-- MY LOANS page (list) -->
+      <div id="myLoans" class="page">
+        <h2>My Loans</h2>
+        <div class="card">
+          <div class="flex-sb"><span><strong>Business Loan (LA1932)</strong> <span class="badge green">Active</span></span><span>₹25,100</span></div>
+          <div class="flex-sb text-muted"><span>EMI ₹500</span><span>Next: 08/03/26</span></div>
+          <button class="btn-small" style="margin-top:0.8rem;" id="viewLoanDetailsBtn">View details</button>
+        </div>
+        <div class="card disabled" style="opacity:0.6;"><span>No other loans</span></div>
+      </div>
+
+      <!-- LOAN DETAILS (specific loan) -->
+      <div id="loanDetails" class="page">
+        <div class="breadcrumb"><i class="fas fa-arrow-left" id="backFromLoan" style="cursor:pointer;"></i> Home > Business Loan (LA1932)</div>
+        <div class="banner"><span class="badge green">● Active</span> Loan account: LA1932</div>
+
+        <!-- info grid -->
+        <div class="grid-3">
+          <div class="card"><span class="text-muted">Loan type</span><h4>Business Loan</h4></div>
+          <div class="card"><span class="text-muted">Sanctioned</span><h4>₹25,100</h4></div>
+          <div class="card"><span class="text-muted">Outstanding</span><h4>₹25,100</h4></div>
+          <div class="card"><span class="text-muted">Interest</span><h4>2% / month</h4></div>
+          <div class="card"><span class="text-muted">EMI amount</span><h4>₹500</h4></div>
+          <div class="card"><span class="text-muted">Sanction date</span><h4>2024-11-11</h4></div>
+          <div class="card"><span class="text-muted">Next EMI due</span><h4>08/03/2026</h4></div>
+          <div class="card"><span class="text-muted">Tenure</span><h4>12 months</h4></div>
+        </div>
+
+        <!-- sticky action buttons -->
+        <div class="card flex-row" style="justify-content:stretch; gap:0.5rem; position:sticky; top:0; background:white; z-index:10;">
+          <button class="btn" style="flex:1;" id="payEmiBtn">💰 Pay EMI</button>
+          <button class="btn-outline" style="flex:1;">🔁 Foreclosure</button>
+          <button class="btn-outline" style="flex:1;">❓ Query</button>
+        </div>
+
+        <!-- full transaction history -->
+        <div class="card">
+          <h4>Transaction history</h4>
+          <table>
+            <tr><th>Date</th><th>Description</th><th>Debit</th><th>Credit</th><th>Balance</th></tr>
+            <tr><td>08 Mar 26</td><td>EMI Payment</td><td>₹500</td><td>—</td><td>₹24,600</td></tr>
+            <tr><td>01 Mar 26</td><td>Late fee</td><td>₹100</td><td>—</td><td>₹25,100</td></tr>
+            <tr><td>11 Nov 24</td><td>Disbursement</td><td>—</td><td>₹25,100</td><td>₹25,100</td></tr>
+          </table>
+        </div>
+
+        <!-- download options -->
+        <div class="flex-row">
+          <button class="btn-outline btn-small"><i class="fas fa-download"></i> Statement PDF</button>
+          <button class="btn-outline btn-small"><i class="fas fa-file-contract"></i> Loan Agreement</button>
+        </div>
+      </div>
+
+      <!-- PAYMENT PAGE (EMI) full detail -->
+      <div id="payment" class="page">
+        <div class="flex-row"><i class="fas fa-arrow-left" id="backFromPayment" style="cursor:pointer;"></i><h3>Pay EMI</h3></div>
+        <div class="card" style="text-align:center;"><h1 style="font-size:3rem;">₹500</h1><span class="badge">Due: 08/03/2026</span></div>
+
+        <!-- payment method tabs -->
+        <div class="payment-tabs" id="paymentTabs">
+          <button id="tabNetbanking" class="active-tab">🏦 Net Banking</button>
+          <button id="tabUpi">📱 UPI</button>
+        </div>
+
+        <!-- Net Banking section -->
+        <div id="netbankingSection">
+          <div class="card">
+            <div class="flex-sb"><span>Transaction ID</span><span class="text-small" id="nbTxn">#TXN202602260236004140</span></div>
+            <div class="flex-sb"><span>Amount</span><strong>₹500.00</strong></div>
+            <div class="badge yellow">⏳ Pending payment</div>
+            <div class="divider"></div>
+            <p><strong>Direct bank transfer</strong></p>
+            <table style="width:auto;">
+              <tr><td>Account Holder</td><td>Abinesh S (AP Finance)</td></tr>
+              <tr><td>Account Number</td><td>350101000006238</td></tr>
+              <tr><td>IFSC</td><td>IOBA0003501</td></tr>
+              <tr><td>Bank</td><td>Indian Overseas Bank</td></tr>
+            </table>
+            <button class="copy-btn" onclick="alert('Bank details copied')"><i class="far fa-copy"></i> Copy bank details</button>
+            <p class="text-small">Use transaction ID as reference</p>
+            <button class="btn" style="margin-top:1rem;">✅ Complete Payment</button>
+          </div>
+        </div>
+
+        <!-- UPI section -->
+        <div id="upiSection" style="display:none;">
+          <div class="card">
+            <div class="flex-sb"><span>Transaction ID</span><span>#TXN202602260236316701</span></div>
+            <div class="flex-sb"><span>Amount</span><strong>₹500.00</strong></div>
+            <div class="badge yellow">⏳ Pending payment</div>
+            <div class="divider"></div>
+            <p><strong>UPI ID:</strong> appayments@iob <button class="copy-btn" onclick="alert('UPI ID copied')">copy</button></p>
+            <div id="qrBox">
+              <button class="btn-outline btn-small" id="toggleQrBtn">🔽 Hide QR Code</button>
+              <div class="qr-placeholder" id="qrImage">[ QR code ]<br>₹500 | Ref:..6701</div>
+            </div>
+            <p class="text-small">1. Open UPI app · 2. Scan QR · 3. Pay</p>
+            <button class="btn">✅ Complete Payment</button>
+          </div>
+        </div>
+        <p><a href="#" id="backToDashFromPay">← Back to dashboard</a></p>
+      </div>
+
+      <!-- ACCOUNT PROFILE (full details) -->
+      <div id="account" class="page">
+        <div class="card flex-row" style="gap:1.5rem;">
+          <div class="avatar-lg" style="position:relative;"><i class="fas fa-camera" style="position:absolute; bottom:0; right:0; background:white; padding:5px; border-radius:50%;"></i></div>
+          <div><h3>Ravinder Singh</h3><p>+91 98765 43210 <span class="badge green">Verified</span></p></div>
+        </div>
+
+        <div class="card">
+          <div class="flex-sb"><span><strong>Email</strong> r@email.com</span><i class="fas fa-pen"></i></div>
+          <div class="flex-sb"><span><strong>Address</strong> 123, Street, City</span><i class="fas fa-pen"></i></div>
+        </div>
+
+        <!-- security section -->
+        <div class="card">
+          <h4>Security</h4>
+          <div style="margin:1rem 0;"><input type="password" placeholder="Current password" style="width:100%; margin:0.3rem 0; padding:0.8rem; border-radius:30px;"></div>
+          <div><input type="password" placeholder="New password" style="width:100%; margin:0.3rem 0; padding:0.8rem; border-radius:30px;"></div>
+          <div><input type="password" placeholder="Confirm" style="width:100%; margin:0.3rem 0; padding:0.8rem; border-radius:30px;"></div>
+          <button class="btn-small">Update password</button>
+          <div class="flex-sb" style="margin-top:1rem;"><span>🔑 App PIN / Biometric</span><button class="btn-outline btn-small">Enable</button></div>
+        </div>
+
+        <!-- bank details card -->
+        <div class="card">
+          <h4>Bank details</h4>
+          <table>
+            <tr><td>Bank</td><td>HDFC Bank</td></tr>
+            <tr><td>Account</td><td>XXXX XXXX 1234</td></tr>
+            <tr><td>IFSC</td><td>HDFC000123</td></tr>
+            <tr><td>Branch</td><td>New Delhi</td></tr>
+            <tr><td>Type</td><td>Savings</td></tr>
+            <tr><td>UPI ID</td><td>ravinder@okhdfcbank</td></tr>
+          </table>
+          <div class="flex-row" style="margin-top:1rem;"><button class="btn-outline btn-small"><i class="fas fa-upload"></i> Upload cheque</button><button class="btn-outline btn-small">Edit</button></div>
+        </div>
+      </div>
+
+      <!-- SUPPORT page (Chat/FAQ) -->
+      <div id="support" class="page">
+        <div class="card"><h3>Chat with us</h3><textarea placeholder="Type your message..." rows="3" style="width:100%; border-radius:20px; padding:1rem;"></textarea><button class="btn">Send</button></div>
+        <div class="card"><h4>Frequently asked questions</h4><p>• How to prepay?<br>• EMI dates change?<br>• Late fee policy</p></div>
+      </div>
+
+      <!-- REPORTS & DOCUMENTS -->
+      <div id="reports" class="page">
+        <h2>Reports & Documents</h2>
+        <div class="card">
+          <h4>Loan statement</h4>
+          <div class="flex-row"><input type="date" value="2026-01-01"> <span>to</span> <input type="date" value="2026-03-01"> <button class="btn-small">Generate</button></div>
+        </div>
+        <div class="card">
+          <h4>Amortization schedule (graph)</h4>
+          <div style="height:120px; background:#eaf1fd; border-radius:30px; display:flex; align-items:center; justify-content:center;">📊 chart placeholder</div>
+        </div>
+        <div class="card">
+          <h4>Loan document</h4>
+          <p><i class="fas fa-file-pdf"></i> Original agreement_LA1932.pdf <button class="btn-small btn-outline">view</button></p>
+        </div>
+      </div>
+
+      <!-- ADMIN PANEL (CRUD style) -->
+      <div id="admin" class="page">
+        <h2>Admin panel</h2>
+        <div class="grid-3">
+          <div class="card"><span class="text-muted">Total disbursements</span><h3>₹2.4 Cr</h3></div>
+          <div class="card"><span class="text-muted">Delinquency rate</span><h3>2.3%</h3></div>
+          <div class="card"><span class="text-muted">Active users</span><h3>1,204</h3></div>
+        </div>
+        <div class="card">
+          <h4>User management</h4>
+          <p><strong>Ravinder S</strong> KYC verified • 1 active loan</p>
+          <p><strong>Anita K</strong> KYC pending</p>
+          <button class="btn-small">Search users</button>
+        </div>
+        <div class="card">
+          <h4>Loan management</h4>
+          <div class="flex-row">
+            <button class="btn-small"><i class="fas fa-plus"></i> Create loan</button>
+            <button class="btn-outline btn-small">Edit loan</button>
+            <button class="btn-outline btn-small">Close loan</button>
+          </div>
+        </div>
+        <div class="card">
+          <h4>Transactions (manual entry)</h4>
+          <button class="btn-small"><i class="fas fa-cash-register"></i> Add cash/cheque</button>
+        </div>
+        <div class="card">
+          <h4>Send notification</h4>
+          <textarea placeholder="Message" rows="2" style="width:100%;"></textarea><button class="btn-small">Push to users</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- bottom mobile nav -->
+<div class="bottom-nav">
+  <a href="#" class="nav-item" data-nav="dashboard"><i class="fas fa-home"></i><span>Home</span></a>
+  <a href="#" class="nav-item" data-nav="myLoans"><i class="fas fa-file-invoice"></i><span>Loans</span></a>
+  <a href="#" class="nav-item" data-nav="account"><i class="fas fa-user"></i><span>Account</span></a>
+  <a href="#" class="nav-item" data-nav="support"><i class="fas fa-headset"></i><span>Support</span></a>
+</div>
+
+<script>
+  (function() {
+    let loggedIn = false;  // start logged out
+
+    const pages = document.querySelectorAll('.page');
+    const navLinks = document.querySelectorAll('[data-nav]');
+    const mobileNavItems = document.querySelectorAll('.bottom-nav .nav-item');
+
+    function showPage(pageId, updateHash = true) {
+      if (!pageId) return;
+      const publicPages = ['landing','login','signup'];
+      if (!loggedIn && !publicPages.includes(pageId)) {
+        window.location.hash = '#landing';
+        return;
+      }
+      pages.forEach(p => p.classList.remove('active-page'));
+      const target = document.getElementById(pageId);
+      if (target) target.classList.add('active-page');
+      else document.getElementById('landing').classList.add('active-page');
+
+      // update nav active
+      navLinks.forEach(link => {
+        let nav = link.getAttribute('data-nav');
+        link.classList.toggle('active', nav === pageId);
+      });
+      mobileNavItems.forEach(item => {
+        let nav = item.getAttribute('data-nav');
+        item.classList.toggle('active', nav === pageId);
+      });
+
+      if (updateHash) window.location.hash = pageId;
+    }
+
+    window.addEventListener('hashchange', () => {
+      let hash = window.location.hash.replace('#','') || 'landing';
+      if (hash === 'myLoans' || hash === 'dashboard' || hash === 'loanDetails' || hash === 'payment' || hash === 'account' || hash === 'support' || hash === 'reports' || hash === 'admin' || hash === 'landing' || hash === 'login' || hash === 'signup') {
+        showPage(hash, false);
+      } else {
+        showPage('landing', false);
+      }
+    });
+
+    // navigation clicks
+    navLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const page = link.getAttribute('data-nav');
+        showPage(page);
+      });
+    });
+    mobileNavItems.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const page = link.getAttribute('data-nav');
+        showPage(page);
+      });
+    });
+
+    // login / signup simulation
+    document.getElementById('loginSubmitBtn')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      loggedIn = true;
+      showPage('dashboard');
+    });
+    document.getElementById('signupSubmitBtn')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      loggedIn = true;
+      showPage('dashboard');
+    });
+    document.getElementById('gotoLoginBtn')?.addEventListener('click', () => showPage('login'));
+    document.getElementById('gotoSignupBtn')?.addEventListener('click', () => showPage('signup'));
+    document.getElementById('loginToSignup')?.addEventListener('click', (e) => { e.preventDefault(); showPage('signup'); });
+
+    // back buttons
+    document.getElementById('backFromLoan')?.addEventListener('click', () => showPage('dashboard'));
+    document.getElementById('backFromPayment')?.addEventListener('click', () => showPage('loanDetails'));
+    document.getElementById('backToDashFromPay')?.addEventListener('click', (e) => { e.preventDefault(); showPage('dashboard'); });
+
+    // view loan details from My Loans
+    document.getElementById('viewLoanDetailsBtn')?.addEventListener('click', () => showPage('loanDetails'));
+    document.getElementById('payEmiBtn')?.addEventListener('click', () => showPage('payment'));
+    document.getElementById('viewAllTransactions')?.addEventListener('click', (e) => { e.preventDefault(); showPage('loanDetails'); });
+
+    // payment method toggle
+    const tabNB = document.getElementById('tabNetbanking');
+    const tabUPI = document.getElementById('tabUpi');
+    const nbSec = document.getElementById('netbankingSection');
+    const upiSec = document.getElementById('upiSection');
+
+    function setMethod(method) {
+      if (method === 'nb') {
+        tabNB.classList.add('active-tab'); tabUPI.classList.remove('active-tab');
+        nbSec.style.display = 'block'; upiSec.style.display = 'none';
+      } else {
+        tabUPI.classList.add('active-tab'); tabNB.classList.remove('active-tab');
+        nbSec.style.display = 'none'; upiSec.style.display = 'block';
+      }
+    }
+    tabNB?.addEventListener('click', () => setMethod('nb'));
+    tabUPI?.addEventListener('click', () => setMethod('upi'));
+
+    // QR toggle
+    let qrVisible = true;
+    document.getElementById('toggleQrBtn')?.addEventListener('click', function() {
+      const qrDiv = document.getElementById('qrImage');
+      if (qrVisible) { qrDiv.style.display = 'none'; this.innerHTML = '🔽 Show QR Code'; }
+      else { qrDiv.style.display = 'flex'; this.innerHTML = '🔽 Hide QR Code'; }
+      qrVisible = !qrVisible;
+    });
+
+    // FAB
+    document.getElementById('fabAddLoan')?.addEventListener('click', () => alert('Apply for new loan (demo)'));
+
+    // initial load
+    if (!window.location.hash || window.location.hash === '#') {
+      showPage('landing');
+    } else {
+      window.dispatchEvent(new Event('hashchange'));
+    }
+  })();
+</script>
+</body>
+</html>
